@@ -12,9 +12,12 @@ Althought they documents the API thoroughly, the official SDK only contains iOS 
 ### Quick start
 
 ```python
-from sonyAPI2 import API
-
-api = API()
+from sonyAPI2 import API2
+import cv2
+import urllib2
+import numpy as np
+import time
+api = API2()
 
 # Search Camera and update api url
 api.update_url()
@@ -23,7 +26,17 @@ api.update_url()
 api.update_api_list()
 
 api.do('setShootMode','still')
-api.do('actTakePicture')
+
+try:
+	result = api.do('actTakePicture')
+	url = result['result'][0][0]
+except KeyError:
+	print result
+f = urllib2.urlopen(url)
+d = np.asarray(bytearray(f.read()), dtype='uint8')
+img = cv2.imdecode(d,cv2.IMREAD_COLOR)
+cv2.imshow('postview',img)
+time.sleep(10)
 ```
 
 ### License

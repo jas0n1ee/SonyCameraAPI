@@ -3,7 +3,7 @@ import urllib2
 import json
 import detectCamera
 
-class API(object):
+class API2(object):
 	def do(self,command, param=[], url = ""):
 		data = {
 			'method': command,
@@ -17,13 +17,14 @@ class API(object):
 			else:
 				req = urllib2.Request(self.url + '/' + self.legal_command[command])
 		except KeyError:
-			print command + "method doesn't exist"
+			print command + " method doesn't exist"
 			return None
 		if len(self.api_list) > 0:
 			try:
 				self.api_list.index(command)
 			except ValueError:
-				print command + "Not support"
+				print command + " Not support"
+				return None
 		req.add_header('Content-Type', 'application/json')
 		response = urllib2.urlopen(req, json.dumps(data))
 		return json.load(response)
